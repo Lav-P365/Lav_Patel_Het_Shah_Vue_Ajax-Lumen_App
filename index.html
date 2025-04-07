@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="initial-scale=1.0, width=device-width">
-    <title>Indian Premier League API</title>
-    <link href="https://fonts.googleapis.com/css?family=Lato%7CRaleway" rel="stylesheet">
-    <link href="css/grid.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
-    <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <script type="module" src="js/main.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+  <title>IPL Teams</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato%7CRaleway" rel="stylesheet" />
+  <link href="css/grid.css" rel="stylesheet" />
+  <link href="css/main.css" rel="stylesheet" />
+  <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script type="module" src="js/main.js"></script>
 </head>
+
 <body>
-    <div class="grid-con" id="app">
-        <div class="col-span-full m-col-start-1 m-col-end-13">
-            <h2>Indian Premier League</h2>
-            <p>Choose your team and know about that</p>
-            <div v-if="loadingTeams">
-                <img src="images/particle-flow.svg" alt="loading indicator" class="loader">
-            </div>
-            <ul id="team-list">
-                <li v-for="team in teams" >
-                    <h3>Title: <a href="#team" @click="getTeam(`${team.id}`)">{{team.title}}</a></h3>
-                </li>
-            </ul>
-        </div>
-        <div class="col-span-full m-col-start-1 m-col-end-13" id="teamInfoCon">
-            <div v-if="loading">
-                <img src="images/particle-flow.svg" alt="loading indicator" class="loader">
-            </div>
-            <div v-if="error">{{error}}</div>
-            <div v-if="name" id="info-box" ;key="name">
-                <img :src="`images/${image}`">
-                <p><span class="title">Owner:</span>{{name}}</p>
-                <p><span class="title">Founded Year:</span>{{founded_date}}</p>
-                <p><span class="title">Owner:</span>{{bio}}</p>
-            </div>
-        </div>
+  <div class="grid-con" id="app">
+    <div class="col-span-full m-col-start-1 m-col-end-13">
+      <h2>IPL Teams &amp; Owners</h2>
+      <p>Click on a team to see detailed owner info.</p>
+
+      <div v-if="loadingTeams">
+        <img src="images/loader.svg" alt="Loading..." class="loader" />
+      </div>
+
+      <ul id="team-list">
+        <li v-for="team in teamsData" :key="team.id">
+          <h3>
+            <a href="#team" @click.prevent="getTeamDetails(`${team.id}`)">
+              {{ team.name }}
+            </a>
+          </h3>
+        </li>
+      </ul>
     </div>
+
+    <div class="col-span-full m-col-start-1 m-col-end-13" id="teamInfoCon">
+      <div v-if="loadingDetails">
+        <img src="images/loader.svg" alt="Loading details..." class="loader" />
+      </div>
+
+      <div v-if="error">{{ error }}</div>
+
+      <div v-if="owner" id="info-box" :key="owner">
+        <img :src="`images/${image}`" alt="Owner Image" />
+        <p><span class="title">Owner:</span> {{ owner }}</p>
+        <p><span class="title">Founded:</span> {{ founded }}</p>
+        <p><span class="title">Stadium:</span> {{ stadium }}</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
