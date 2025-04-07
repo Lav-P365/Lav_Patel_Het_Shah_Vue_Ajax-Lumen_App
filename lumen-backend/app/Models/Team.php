@@ -11,7 +11,7 @@ class Team extends Model
      *
      * @var array
      */
-    protected $fillable = ['team_name', 'owner_id', 'home_city', 'founded_year', 'team_logo'];
+    protected $fillable = ['team_name', 'home_city', 'owner_id', 'founded_date', 'team_image'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -19,12 +19,4 @@ class Team extends Model
      * @var array
      */
     protected $hidden = [];
-
-    /**
-     * Define the relationship between Team and Owner.
-     */
-    public function owner()
-    {
-        return $this->belongsTo(Owner::class, 'owner_id');
-    }
 }

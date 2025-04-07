@@ -7,11 +7,10 @@ use App\Models\Owner;
 
 class OwnerController extends Controller
 {
-    /**
-     * Get all IPL team owners
-     */
-    public function getOwners() :JsonResponse|mixed {
+
+    public function getOwners()
+    {
         $owners = Owner::all();
-        return response()->json($data);    
+        return response()->json($owners);
     }
 }
