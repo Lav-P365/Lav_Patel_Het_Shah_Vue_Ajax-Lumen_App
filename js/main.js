@@ -29,15 +29,30 @@ const app = Vue.createApp({
       this.loadingDetails = true;
       this.error = "";
 
+      // Fetch team details based on the team ID
       fetch(`http://localhost/lumen-backend/public/teams/${id}`)
         .then(res => res.json())
         .then(data => {
           if (data.length > 0) {
             const team = data[0];
-            this.owner = team.owner || "Not available";
-            this.founded = team.founded || "Not available";
-            this.stadium = team.stadium || "Not available";
-            this.image = team.image || "placeholder.jpg";
+            this.founded = team.founded_year || "Not available";
+            this.image = team.team_image || "placeholder.jpg";
+
+            // Fetch the owner details
+            fetch(`http://localhost/lumen-backend/public/owners/${team.owner_id}`)
+              .then(res => res.json())
+              .then(ownerData => {
+                if (ownerData.length > 0) {
+                  const owner = ownerData[0];
+                  this.owner = owner.owner_name || "Not available";
+                  this.ownerBio = owner.bio || "Not available";
+                } else {
+                  this.error = "Owner details not found.";
+                }
+              })
+              .catch(error => {
+                this.error = "Failed to load owner details.";
+              });
           } else {
             this.error = "No details found.";
           }

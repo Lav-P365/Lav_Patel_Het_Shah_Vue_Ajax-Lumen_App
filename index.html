@@ -18,16 +18,17 @@
       <p>Click on a team to see detailed owner info.</p>
 
       <div v-if="loadingTeams">
-        <img src="images/loader.svg" alt="Loading..." class="loader" />
+        <img src="images/particle-flow.svg" alt="Loading..." class="loader" />
       </div>
 
       <ul id="team-list">
         <li v-for="team in teamsData" :key="team.id">
           <h3>
-            <a href="#team" @click.prevent="getTeamDetails(`${team.id}`)">
-              {{ team.name }}
+            <a href="#team" @click.prevent="getTeamDetails(team.id)">
+              {{ team.team_name }}
             </a>
           </h3>
+          <img :src="`images/${team.team_image}`" alt="Team Logo" />
         </li>
       </ul>
     </div>
@@ -39,11 +40,13 @@
 
       <div v-if="error">{{ error }}</div>
 
-      <div v-if="owner" id="info-box" :key="owner">
-        <img :src="`images/${image}`" alt="Owner Image" />
-        <p><span class="title">Owner:</span> {{ owner }}</p>
-        <p><span class="title">Founded:</span> {{ founded }}</p>
-        <p><span class="title">Stadium:</span> {{ stadium }}</p>
+      <div v-if="teamDetails" id="info-box" :key="teamDetails.id">
+        <img :src="`images/${teamDetails.team_image}`" alt="Team Logo" />
+        <p><span class="title">Team:</span> {{ teamDetails.team_name }}</p>
+        <p><span class="title">Founded:</span> {{ teamDetails.founded_year }}</p>
+        <p><span class="title">Home City:</span> {{ teamDetails.home_city }}</p>
+        <p><span class="title">Owner:</span> {{ owner.name }}</p>
+        <p><span class="title">Owner Bio:</span> {{ owner.bio }}</p>
       </div>
     </div>
   </div>
