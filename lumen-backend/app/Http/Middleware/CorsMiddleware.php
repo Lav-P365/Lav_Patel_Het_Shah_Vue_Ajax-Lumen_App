@@ -35,5 +35,5 @@ class CorsMiddleware
         }
 
         return $response;
-    }
+}
 }
