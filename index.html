@@ -12,39 +12,27 @@
 </head>
 
 <body>
-  <div class="grid-con" id="app">
-    <div class="col-span-full m-col-start-1 m-col-end-13">
-      <h2>IPL Teams &amp; Owners</h2>
-      <p>Click on a team to see detailed owner info.</p>
+  <div id="app">
+    <h1>🏏 IPL Teams</h1>
 
-      <div v-if="loadingTeams">
-        <img src="images/loader.svg" alt="Loading..." class="loader" />
+    <div v-if="loadingList">Loading teams...</div>
+    <div v-if="errorList">{{ errorList }}</div>
+
+    <div class="teams" v-if="teams.length > 0">
+      <div class="card" v-for="team in teams" :key="team.id" @click="fetchOwner(team.owner_id)">
+        <img :src="`/images/${team.team_image}`" alt="Team Logo">
+        <h2>{{ team.team_name }}</h2>
+        <p>{{ team.home_city }} | Founded: {{ team.founded_year }}</p>
       </div>
-
-      <ul id="team-list">
-        <li v-for="team in teamsData" :key="team.id">
-          <h3>
-            <a href="#team" @click.prevent="getTeamDetails(`${team.id}`)">
-              {{ team.name }}
-            </a>
-          </h3>
-        </li>
-      </ul>
     </div>
 
-    <div class="col-span-full m-col-start-1 m-col-end-13" id="teamInfoCon">
-      <div v-if="loadingDetails">
-        <img src="images/loader.svg" alt="Loading details..." class="loader" />
-      </div>
+    <div v-if="loadingOwner">Loading owner info...</div>
+    <div v-if="errorOwner">{{ errorOwner }}</div>
 
-      <div v-if="error">{{ error }}</div>
-
-      <div v-if="owner" id="info-box" :key="owner">
-        <img :src="`images/${image}`" alt="Owner Image" />
-        <p><span class="title">Owner:</span> {{ owner }}</p>
-        <p><span class="title">Founded:</span> {{ founded }}</p>
-        <p><span class="title">Stadium:</span> {{ stadium }}</p>
-      </div>
+    <div v-if="owner">
+      <h2>👤 Owner Info</h2>
+      <h3>{{ owner.owner_name }}</h3>
+      <p>{{ owner.bio }}</p>
     </div>
   </div>
 </body>

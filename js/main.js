@@ -1,53 +1,44 @@
-const app = Vue.createApp({
-  created() {
-    // Fetch all IPL teams
-    fetch('http://localhost/lumen-backend/public/teams')
-      .then(res => res.json())
-      .then(data => {
-        this.teamsData = data;
-        this.loadingTeams = false;
-      })
-      .catch(error => {
-        this.error = "Unable to fetch teams.";
-        this.loadingTeams = false;
-      });
+new Vue({
+  el: '#app',
+  data: {
+    teams: [],
+    owner: null,
+    loadingList: true,
+    loadingOwner: false,
+    errorList: null,
+    errorOwner: null,
   },
-  data() {
-    return {
-      teamsData: [],
-      owner: "",
-      founded: "",
-      stadium: "",
-      image: "",
-      error: "",
-      loadingTeams: true,
-      loadingDetails: false,
-    };
+  created() {
+    this.fetchTeams();
   },
   methods: {
-    getTeamDetails(id) {
-      this.loadingDetails = true;
-      this.error = "";
-
-      fetch(`http://localhost/lumen-backend/public/teams/${id}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.length > 0) {
-            const team = data[0];
-            this.owner = team.owner || "Not available";
-            this.founded = team.founded || "Not available";
-            this.stadium = team.stadium || "Not available";
-            this.image = team.image || "placeholder.jpg";
-          } else {
-            this.error = "No details found.";
-          }
-          this.loadingDetails = false;
-          document.querySelector("#teamInfoCon").scrollIntoView({ behavior: "smooth", block: "end" });
+    fetchTeams() {
+      axios.get('http://localhost:8000/api/teams')
+        .then(response => {
+          this.teams = response.data;
         })
         .catch(error => {
-          this.error = "Failed to load team details.";
-          this.loadingDetails = false;
+          this.errorList = "Failed to load teams.";
+        })
+        .finally(() => {
+          this.loadingList = false;
+        });
+    },
+    fetchOwner(ownerId) {
+      this.loadingOwner = true;
+      this.errorOwner = null;
+      this.owner = null;
+
+      axios.get(`http://localhost:8000/api/owner/${ownerId}`)
+        .then(response => {
+          this.owner = response.data;
+        })
+        .catch(error => {
+          this.errorOwner = "Failed to load owner information.";
+        })
+        .finally(() => {
+          this.loadingOwner = false;
         });
     }
   }
-}).mount('#app');
+});
