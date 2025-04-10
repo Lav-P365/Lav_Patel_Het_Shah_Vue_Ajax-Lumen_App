@@ -4,5 +4,4 @@ assets/
 /.vscode
 Homestead.json
 Homestead.yaml
-.env
 .phpunit.results.cache

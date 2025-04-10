@@ -15,8 +15,26 @@
   <div id="app">
     <h1>🏏 IPL Teams</h1>
 
+
     <div v-if="loadingList">Loading teams...</div>
     <div v-if="errorList">{{ errorList }}</div>
+
+      <div v-if="loadingTeams">
+        <img src="images/particle-flow.svg" alt="Loading..." class="loader" />
+      </div>
+
+      <ul id="team-list">
+        <li v-for="team in teamsData" :key="team.id">
+          <h3>
+            <a href="#team" @click.prevent="getTeamDetails(team.id)">
+              {{ team.team_name }}
+            </a>
+          </h3>
+          <img :src="`images/${team.team_image}`" alt="Team Logo" />
+        </li>
+      </ul>
+    </div>
+
 
     <div class="teams" v-if="teams.length > 0">
       <div class="card" v-for="team in teams" :key="team.id" @click="fetchOwner(team.owner_id)">
@@ -33,6 +51,16 @@
       <h2>👤 Owner Info</h2>
       <h3>{{ owner.owner_name }}</h3>
       <p>{{ owner.bio }}</p>
+
+      <div v-if="teamDetails" id="info-box" :key="teamDetails.id">
+        <img :src="`images/${teamDetails.team_image}`" alt="Team Logo" />
+        <p><span class="title">Team:</span> {{ teamDetails.team_name }}</p>
+        <p><span class="title">Founded:</span> {{ teamDetails.founded_year }}</p>
+        <p><span class="title">Home City:</span> {{ teamDetails.home_city }}</p>
+        <p><span class="title">Owner:</span> {{ owner.name }}</p>
+        <p><span class="title">Owner Bio:</span> {{ owner.bio }}</p>
+      </div>
+
     </div>
   </div>
 </body>
